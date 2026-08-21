@@ -1,79 +1,104 @@
-import { AMENITY_ICONS, IconStar, IconCheck } from './Icons';
+import HotelMedia from './HotelMedia';
+import { AMENITY_ICONS } from './iconMaps';
+import { IconCheck, IconPin, IconStar, IconTrend } from './Icons';
 import { kmToMiles } from '../utils/geo';
 import { formatAED } from '../utils/currency';
+import { reviewLabel } from '../data/mockHotels';
+
+const VISIBLE_AMENITIES = 4;
 
 export default function HotelCard({ hotel, isBestRate, onSelect }) {
   const distanceMi = kmToMiles(hotel.distanceKm);
   const discountPct = hotel.originalPrice
     ? Math.round((1 - hotel.price / hotel.originalPrice) * 100)
     : null;
+  const shown = hotel.amenities.slice(0, VISIBLE_AMENITIES);
+  const overflow = hotel.amenities.length - shown.length;
 
   return (
-    <article className="hotel-card" onClick={() => onSelect(hotel)}>
-      <div className="hotel-card-media" style={{ '--hue': hueFromId(hotel.id) }}>
-        <span className="hotel-card-type">{hotel.type}</span>
-        {isBestRate && <span className="hotel-card-badge">Best rate nearby</span>}
-      </div>
+    <article className="card">
+      {/* The whole card is clickable, but the button is what screen readers and
+          keyboards land on — avoids a click handler on a non-interactive tag. */}
+      <button
+        type="button"
+        className="card-hit"
+        onClick={() => onSelect(hotel)}
+        aria-label={`View details and rates for ${hotel.name}`}
+      />
 
-      <div className="hotel-card-body">
-        <div className="hotel-card-header">
-          <h3>{hotel.name}</h3>
-          <div className="stars" aria-label={`${hotel.stars} star`}>
+      <HotelMedia hotel={hotel} className="card-media">
+        <span className="tag tag-type">{hotel.type}</span>
+        {isBestRate && (
+          <span className="tag tag-best">
+            <IconTrend width={12} height={12} strokeWidth={2.5} />
+            Best rate
+          </span>
+        )}
+        {discountPct > 0 && <span className="tag tag-deal">−{discountPct}%</span>}
+      </HotelMedia>
+
+      <div className="card-body">
+        <div className="card-top">
+          <h3 className="card-name">{hotel.name}</h3>
+          <span className="stars" aria-label={`${hotel.stars} star property`}>
             {Array.from({ length: hotel.stars }).map((_, i) => (
-              <IconStar key={i} />
+              <IconStar key={i} width={12} height={12} />
             ))}
-          </div>
+          </span>
         </div>
 
-        <p className="hotel-card-address">
-          {hotel.address} · {distanceMi.toFixed(1)} mi away
+        <p className="card-loc">
+          <IconPin width={14} height={14} />
+          {hotel.neighbourhood} · {distanceMi.toFixed(1)} mi away
         </p>
 
-        <div className="review-badge">
-          <span className="review-score">{hotel.reviewScore.toFixed(1)}</span>
-          <span className="review-count">{hotel.reviewCount.toLocaleString()} reviews</span>
-        </div>
+        <p className="card-highlight">{hotel.highlight}</p>
 
-        <div className="amenity-row">
-          {hotel.amenities.slice(0, 5).map((a) => {
+        <ul className="amenity-row">
+          {shown.map((a) => {
             const Icon = AMENITY_ICONS[a];
             return (
-              <span key={a} className="amenity-chip" title={a}>
-                {Icon && <Icon />}
-                {a}
-              </span>
+              <li key={a} className="amenity" title={a}>
+                {Icon && <Icon width={13} height={13} />}
+                <span>{a}</span>
+              </li>
             );
           })}
+          {overflow > 0 && <li className="amenity amenity-more">+{overflow}</li>}
+        </ul>
+
+        <div className="card-signals">
+          {hotel.freeCancellation && (
+            <span className="signal signal-good">
+              <IconCheck width={13} height={13} strokeWidth={2.5} />
+              Free cancellation
+            </span>
+          )}
+          {hotel.roomsLeft && (
+            <span className="signal signal-urgent">
+              Only {hotel.roomsLeft} left
+            </span>
+          )}
         </div>
 
-        {hotel.freeCancellation && (
-          <p className="free-cancel">
-            <IconCheck /> Free cancellation
-          </p>
-        )}
-
-        <div className="hotel-card-footer">
-          <div className="price-block">
-            {hotel.originalPrice && (
-              <span className="price-original">{formatAED(hotel.originalPrice)}</span>
-            )}
-            <span className="price-current">{formatAED(hotel.price)}</span>
-            <span className="price-unit">/night</span>
-            {discountPct && <span className="price-discount">-{discountPct}%</span>}
+        <footer className="card-foot">
+          <div className="score">
+            <span className="score-num">{hotel.reviewScore.toFixed(1)}</span>
+            <span className="score-meta">
+              <strong>{reviewLabel(hotel.reviewScore)}</strong>
+              <span>{hotel.reviewCount.toLocaleString()} reviews</span>
+            </span>
           </div>
-          <button type="button" className="btn btn-primary btn-small">
-            View deal
-          </button>
-        </div>
+
+          <div className="price">
+            {hotel.originalPrice && (
+              <span className="price-was">{formatAED(hotel.originalPrice)}</span>
+            )}
+            <span className="price-now">{formatAED(hotel.price)}</span>
+            <span className="price-unit">per night</span>
+          </div>
+        </footer>
       </div>
     </article>
   );
-}
-
-// Deterministic hue per hotel so the placeholder media block always looks
-// the same for a given hotel instead of flickering between renders.
-function hueFromId(id) {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 360;
-  return h;
 }

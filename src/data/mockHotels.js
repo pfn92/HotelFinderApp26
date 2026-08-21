@@ -25,6 +25,22 @@ const STREET_NAMES = [
   'Hessa St', 'Al Khaleej Rd',
 ];
 
+const NEIGHBOURHOODS = [
+  'Downtown', 'Marina District', 'Beachfront', 'Old Town', 'Business Bay',
+  'Financial Centre', 'Waterfront', 'Cultural Quarter', 'Airport District', 'Garden District',
+];
+
+const HIGHLIGHTS = [
+  'Rooftop infinity pool',
+  'Panoramic skyline views',
+  'Award-winning restaurant',
+  'Private beach cabanas',
+  'Newly renovated rooms',
+  'Steps from the metro',
+  'Full-service desert spa',
+  'Family suites available',
+];
+
 function pick(rand, arr) {
   return arr[Math.floor(rand() * arr.length)];
 }
@@ -40,13 +56,22 @@ function pickMany(rand, arr, min, max) {
   return result;
 }
 
+/** Booking-style word for a 0-10 review score. */
+export function reviewLabel(score) {
+  if (score >= 9) return 'Exceptional';
+  if (score >= 8.5) return 'Excellent';
+  if (score >= 8) return 'Very good';
+  if (score >= 7) return 'Good';
+  return 'Pleasant';
+}
+
 /**
  * Deterministically generates a list of mock hotels/resorts around a
  * coordinate. Same (lat, lng) always yields the same results, so a repeat
  * search or a page refresh looks stable to the user.
  */
 export function generateHotels(lat, lng, count = 24) {
-  const seed = seedFromString(`${lat.toFixed(3)},${lng.toFixed(3)}|v1`);
+  const seed = seedFromString(`${lat.toFixed(3)},${lng.toFixed(3)}|v2`);
   const rand = mulberry32(seed);
   const hotels = [];
 
@@ -74,6 +99,11 @@ export function generateHotels(lat, lng, count = 24) {
     const amenities = pickMany(rand, AMENITIES_POOL, 4, 7);
     const freeCancellation = rand() < 0.55;
     const streetNum = 100 + Math.floor(rand() * 9800);
+    const neighbourhood = pick(rand, NEIGHBOURHOODS);
+    const highlight = pick(rand, HIGHLIGHTS);
+    // Scarcity signal on a minority of listings only, so it keeps its punch.
+    const roomsLeft = rand() < 0.3 ? 1 + Math.floor(rand() * 4) : null;
+    const breakfastIncluded = amenities.includes('Free Breakfast');
 
     hotels.push({
       id: `h${i}-${seed}`,
@@ -89,8 +119,12 @@ export function generateHotels(lat, lng, count = 24) {
       lng: hLng,
       distanceKm,
       address: `${streetNum} ${pick(rand, STREET_NAMES)}`,
+      neighbourhood,
+      highlight,
       amenities,
       freeCancellation,
+      breakfastIncluded,
+      roomsLeft,
     });
   }
 

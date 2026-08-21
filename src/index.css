@@ -1,22 +1,79 @@
-:root {
-  --bg: #f6f7fb;
-  --surface: #ffffff;
-  --surface-2: #f0f1f6;
-  --text: #1d1f27;
-  --text-muted: #666b7a;
-  --border: #e2e4ec;
-  --accent: #1f6feb;
-  --accent-hover: #1859c4;
-  --accent-contrast: #ffffff;
-  --success: #12805c;
-  --danger: #c4472c;
-  --star: #f5a524;
-  --radius: 14px;
-  --shadow: 0 4px 16px rgba(20, 24, 40, 0.06);
-  --shadow-lg: 0 12px 32px rgba(20, 24, 40, 0.16);
+/* ==========================================================================
+   StayScout — design tokens & base styles
+   Light palette lives on bare :root. Dark is redefined twice: once behind
+   prefers-color-scheme (guarded so an explicit light choice wins) and once
+   behind [data-theme="dark"] so the in-app toggle wins in both directions.
+   ========================================================================== */
 
-  font: 15px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
-  color-scheme: light dark;
+:root {
+  /* Neutrals — cool slate */
+  --bg: #f6f7f9;
+  --bg-elevated: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #eef0f4;
+  --surface-3: #e4e7ee;
+  --border: #e3e6ec;
+  --border-strong: #cfd4de;
+  --text: #0f1729;
+  --text-muted: #5a6478;
+  --text-subtle: #838c9e;
+
+  /* Brand */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef0fe;
+  --accent-contrast: #ffffff;
+
+  /* Semantic */
+  --success: #059669;
+  --success-soft: #e6f6f1;
+  --danger: #dc2626;
+  --star: #f59e0b;
+  --deal: #d9480f;
+  --deal-soft: #fdefe6;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 41, 0.05);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 41, 0.06);
+  --shadow-md: 0 6px 20px rgba(15, 23, 41, 0.09);
+  --shadow-lg: 0 20px 48px rgba(15, 23, 41, 0.18);
+  --ring: 0 0 0 3px rgba(79, 70, 229, 0.35);
+
+  /* Geometry */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-full: 999px;
+
+  /* Spacing scale */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+
+  /* Type */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --t-xs: 0.75rem;
+  --t-sm: 0.8125rem;
+  --t-base: 0.9375rem;
+  --t-md: 1.0625rem;
+  --t-lg: 1.375rem;
+  --t-xl: 1.875rem;
+  --t-2xl: 2.5rem;
+
+  --header-h: 64px;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-size: var(--t-base);
+  line-height: 1.55;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -25,41 +82,165 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark — system preference (unless the user explicitly chose light) */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #12131a;
-    --surface: #1a1c25;
-    --surface-2: #23252f;
-    --text: #eceef4;
-    --text-muted: #9a9fb0;
-    --border: #2d303c;
-    --accent: #5b9dfb;
-    --accent-hover: #7fb0fc;
-    --accent-contrast: #0c0d12;
-    --success: #3ecf9a;
-    --danger: #ff8266;
-    --star: #ffc24b;
-    --shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  :root:not([data-theme='light']) {
+    --bg: #0b0e17;
+    --bg-elevated: #141824;
+    --surface: #141824;
+    --surface-2: #1c2130;
+    --surface-3: #262c3d;
+    --border: #262c3d;
+    --border-strong: #363e54;
+    --text: #e8ebf2;
+    --text-muted: #949db4;
+    --text-subtle: #6f7891;
+
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --accent-soft: #1e2140;
+    --accent-contrast: #0b0e17;
+
+    --success: #34d399;
+    --success-soft: #10261f;
+    --danger: #f87171;
+    --star: #fbbf24;
+    --deal: #fb923c;
+    --deal-soft: #2b1a10;
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.45);
+    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.7);
+    --ring: 0 0 0 3px rgba(129, 140, 248, 0.4);
+
+    color-scheme: dark;
   }
 }
 
-* {
+/* Dark — explicit toggle */
+:root[data-theme='dark'] {
+  --bg: #0b0e17;
+  --bg-elevated: #141824;
+  --surface: #141824;
+  --surface-2: #1c2130;
+  --surface-3: #262c3d;
+  --border: #262c3d;
+  --border-strong: #363e54;
+  --text: #e8ebf2;
+  --text-muted: #949db4;
+  --text-subtle: #6f7891;
+
+  --accent: #818cf8;
+  --accent-hover: #a5b4fc;
+  --accent-soft: #1e2140;
+  --accent-contrast: #0b0e17;
+
+  --success: #34d399;
+  --success-soft: #10261f;
+  --danger: #f87171;
+  --star: #fbbf24;
+  --deal: #fb923c;
+  --deal-soft: #2b1a10;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.7);
+  --ring: 0 0 0 3px rgba(129, 140, 248, 0.4);
+
+  color-scheme: dark;
+}
+
+/* --------------------------------------------------------------------------
+   Reset
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
 }
 
-h1, h2, h3, h4, p, ul {
+h1, h2, h3, h4, h5, h6, p, ul, ol, figure {
   margin: 0;
 }
 
-button {
-  font: inherit;
+ul, ol {
+  padding: 0;
+  list-style: none;
 }
 
-input, select {
+h1, h2, h3, h4 {
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+
+button, input, select, textarea {
   font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* Consistent, visible focus for keyboard users only */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--r-sm);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--r-full);
+  border: 3px solid var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

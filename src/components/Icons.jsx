@@ -181,17 +181,107 @@ export function IconCheck(props) {
   );
 }
 
-export const AMENITY_ICONS = {
-  'Free WiFi': IconWifi,
-  Pool: IconPool,
-  'Free Breakfast': IconBreakfast,
-  Parking: IconParking,
-  Gym: IconGym,
-  Spa: IconSpa,
-  'Pet Friendly': IconPet,
-  'Air Conditioning': IconAC,
-  Restaurant: IconRestaurant,
-  Bar: IconRestaurant,
-  'Beach Access': IconBeach,
-  'Airport Shuttle': IconShuttle,
-};
+export function IconSun(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </svg>
+  );
+}
+
+export function IconMoon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+    </svg>
+  );
+}
+
+export function IconGrid(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="3" width="7" height="7" rx="1.5" />
+      <rect x="14" y="3" width="7" height="7" rx="1.5" />
+      <rect x="3" y="14" width="7" height="7" rx="1.5" />
+      <rect x="14" y="14" width="7" height="7" rx="1.5" />
+    </svg>
+  );
+}
+
+export function IconMap(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9 3L3 5.5v15L9 18l6 3 6-2.5v-15L15 6z" />
+      <path d="M9 3v15M15 6v15" />
+    </svg>
+  );
+}
+
+export function IconSliders(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h10M18 18h2" />
+      <circle cx="16" cy="6" r="2" />
+      <circle cx="10" cy="12" r="2" />
+      <circle cx="16" cy="18" r="2" />
+    </svg>
+  );
+}
+
+export function IconBed(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3 18v-8h13a5 5 0 0 1 5 5v3" />
+      <path d="M3 14h18M3 18v2M21 18v2" />
+      <circle cx="7.5" cy="11.5" r="1.5" />
+    </svg>
+  );
+}
+
+export function IconPalm(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 22c0-6 0-9 1-12" />
+      <path d="M13 10c-3-3-7-2-9 1 3-1 5 0 6 1" />
+      <path d="M13 10c1-4 5-6 8-4-3 0-5 2-5 4" />
+      <path d="M13 10c3-1 6 1 6 4-2-2-4-2-5-1" />
+    </svg>
+  );
+}
+
+export function IconHome(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3 10.5 12 3l9 7.5" />
+      <path d="M5 9.5V21h14V9.5" />
+      <path d="M10 21v-6h4v6" />
+    </svg>
+  );
+}
+
+export function IconChevronDown(props) {
+  return (
+    <svg {...base} {...props}>
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
+export function IconTrend(props) {
+  return (
+    <svg {...base} {...props}>
+      <polyline points="3 17 9 11 13 15 21 7" />
+      <polyline points="15 7 21 7 21 13" />
+    </svg>
+  );
+}
+
+export function IconAlert(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v5M12 16.5v.5" />
+    </svg>
+  );
+}
